@@ -32,7 +32,7 @@ public class Contenedor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "codigo", nullable = false, unique = true, length = 30)
     private String codigo;

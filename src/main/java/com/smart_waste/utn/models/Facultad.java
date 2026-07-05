@@ -28,7 +28,7 @@ public class Facultad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private Integer id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "codigo", nullable = false, unique = true, length = 20)

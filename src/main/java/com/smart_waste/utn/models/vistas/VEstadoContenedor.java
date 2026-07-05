@@ -19,7 +19,7 @@ public class VEstadoContenedor {
 
     @Id
     @Column(name = "contenedor_id")
-    private Long contenedorID;
+    private Integer contenedorID;
 
     @Column(name = "contenedor_codigo")
     private String contenedorCodigo;

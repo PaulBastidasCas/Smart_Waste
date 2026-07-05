@@ -28,7 +28,7 @@ public class TipoResiduo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private Integer id;
 
     @Column(name = "nombre", nullable = false, unique = true, length = 80)
     private String nombre;

@@ -16,7 +16,7 @@ public class VKpiFacultad {
 
     @Id
     @Column(name = "facultad_id")
-    private Long facultadId;
+    private Integer facultadId;
 
     @Column(name = "facultad_codigo")
     private String facultadCodigo;

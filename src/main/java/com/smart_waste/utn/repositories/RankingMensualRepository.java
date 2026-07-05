@@ -1,9 +1,9 @@
 package com.smart_waste.utn.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface RankingMensualRepository extends JpaRepository<RankingMensualRepository, Long>{
+import com.smart_waste.utn.models.RankingMensual;
+
+public interface RankingMensualRepository extends JpaRepository<RankingMensual, Long>{
 
 }

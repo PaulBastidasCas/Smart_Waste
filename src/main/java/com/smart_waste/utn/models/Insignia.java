@@ -24,7 +24,7 @@ public class Insignia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private Integer id;
 
     @Column(name = "nombre", nullable = false, unique = true, length = 100)
     private String nombre;
