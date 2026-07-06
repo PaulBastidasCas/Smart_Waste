@@ -25,7 +25,7 @@ public class TokenRevocado {
     private Long id;
 
     @Column(name = "token_jti", nullable = false, unique = true, length = 255)
-    private String tokenJt;
+    private String tokenJwt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
