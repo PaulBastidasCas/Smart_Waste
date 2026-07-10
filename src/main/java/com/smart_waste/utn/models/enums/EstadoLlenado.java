@@ -1,6 +1,6 @@
 package com.smart_waste.utn.models.enums;
 
-public enum EstadoLLeno {
+public enum EstadoLlenado {
     VACIO,
     MEDIO,
     CRITICO

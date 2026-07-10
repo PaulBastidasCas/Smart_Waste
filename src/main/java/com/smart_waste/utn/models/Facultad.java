@@ -3,12 +3,8 @@ package com.smart_waste.utn.models;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.smart_waste.utn.models.enums.CodigoFac;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,33 +23,32 @@ public class Facultad {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    @Column(name = "fac_id", nullable = false)
+    private Integer facId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "codigo", nullable = false, unique = true, length = 20)
-    private CodigoFac codigo;
+    @Column(name = "fac_codigo", nullable = false, unique = true, length = 20)
+    private String facCodigo;
 
-    @Column(name = "nombre", nullable = false, length = 150)
-    private String nombre;
+    @Column(name = "fac_nombre", nullable = false, length = 150)
+    private String facNombre;
 
-    @Column(name = "descripcion", length = 300)
-    private String descripcion;
+    @Column(name = "fac_descripcion" , length = 300)
+    private String facDescripcion;
 
-    @Column(name = "latitud", precision = 10, scale = 8)
-    private BigDecimal latitud;
+    @Column(name = "fac_latitud", precision = 10, scale = 8)
+    private BigDecimal facLatitud;
 
-    @Column(name = "longitud", precision = 11, scale = 8)
-    private BigDecimal longitud;
+    @Column(name = "fac_longitud", precision = 11, scale = 8)
+    private BigDecimal facLongitud;
 
-    @Column(name = "activa", nullable = false)
-    private Boolean activa = true;
+    @Column(name = "fac_activa", nullable = false)
+    private Boolean facActiva = true;
 
-    @Column(name = "creado_en", nullable = false)
-    private LocalDateTime creadoEn = LocalDateTime.now();
+    @Column(name = "fac_creado_en")
+    private LocalDateTime facCreado = LocalDateTime.now();
 
     @PrePersist
     protected void onCreate(){
-        this.creadoEn = LocalDateTime.now();
+        this.facCreado = LocalDateTime.now();
     }
 }

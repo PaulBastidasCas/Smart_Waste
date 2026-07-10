@@ -22,31 +22,37 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tokens_revocados")
-public class TokenRevocado {
+@Table(name = "facultad_insignias")
+public class FacultadInsignia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tok_id", nullable = false)
-    private Long tokId;
-
-    @Column(name = "tok_jti", nullable = false, length = 255, unique = true)
-    private String tokJti;
+    @Column(name = "fin_id", nullable = false)
+    private Long finId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tok_usuario_id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Usuario tokUsuario;
+    @JoinColumn(name = "fin_facultad_id", nullable = false)
+    private Facultad finFacultad;
 
-    @Column(name = "tok_revocado_en", nullable = false)
-    private LocalDateTime tokRevocado = LocalDateTime.now();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JoinColumn(name = "fin_insignia_id", nullable = false)
+    private Insignia finInsignia;
 
-    @Column(name = "tok_expira_en", nullable = false)
-    private LocalDateTime tokExpira;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JoinColumn(name = "fin_reto_id")
+    private RetoComunitario finReto;
+
+    @Column(name = "fin_ganada_en", nullable = false)
+    private LocalDateTime finGanadaEn = LocalDateTime.now();
 
     @PrePersist
     protected void onCreate(){
-        this.tokRevocado = LocalDateTime.now();
+        this.finGanadaEn = LocalDateTime.now();
     }
 }

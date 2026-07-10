@@ -3,7 +3,7 @@ package com.smart_waste.utn.models;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.smart_waste.utn.models.enums.Color;
+import com.smart_waste.utn.models.enums.CodigoColor;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,41 +19,41 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Table(name = "tipos_residuo")
 public class TipoResiduo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    @Column(name = "tre_id", nullable = false)
+    private Integer treId;
 
-    @Column(name = "nombre", nullable = false, unique = true, length = 80)
-    private String nombre;
+    @Column(name = "tre_nombre", nullable = false, unique = true, length = 80)
+    private String treNombre;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "codigo_color", nullable = false, length = 20)
-    private Color codigoColor;
+    @Column(name = "tre_codigo_color", nullable = false, length = 20)
+    private CodigoColor treCodigoColor;
 
-    @Column(name = "color_hex", nullable = false, length = 7)
-    private String colorHex;
+    @Column(name = "tre_color_hex", nullable = false, length = 7)
+    private String treColorHex;
 
-    @Column(name = "descripcion", length = 255)
-    private String descripcion;
+    @Column(name = "tre_descripcion", length = 255)
+    private String treDescripcion;
 
-    @Column(name = "factor_kg_por_unidad", precision = 8, scale = 4)
-    private BigDecimal factorKgUnidad = new BigDecimal("1.0000");
+    @Column(name = "tre_factor_kg_por_unidad", precision = 8, scale = 4)
+    private BigDecimal treFactorKgUnidad = BigDecimal.ONE;
 
-    @Column(name = "precio_mercado_kg", precision = 8, scale = 2)
-    private BigDecimal precioMercadoKg = BigDecimal.ZERO;
+    @Column(name = "tre_precio_mercado_kg", precision = 8, scale = 2)
+    private BigDecimal trePrecioMercadoKg = BigDecimal.ZERO;
 
-    @Column(name = "creado_en", nullable = false)
-    private LocalDateTime creadoEn = LocalDateTime.now();
+    @Column(name = "tre_creado_en", nullable = false)
+    private LocalDateTime treCreado = LocalDateTime.now();
 
     @PrePersist
     protected void onCreate(){
-        this.creadoEn = LocalDateTime.now();
+        this.treCreado = LocalDateTime.now();
     }
 }

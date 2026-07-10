@@ -19,7 +19,9 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -30,43 +32,49 @@ public class AlertaSistema {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @Column(name = "ale_id", nullable = false)
+    private Long aleId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_alerta", nullable = false)
-    private TipoAlerta tipoAlerta;
+    @Column(name = "ale_tipo_alerta", nullable = false, length = 50)
+    private TipoAlerta aleTipoAlerta;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "contenedor_id")
-    private Contenedor contenedor;
+    @JoinColumn(name = "ale_contenedor_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Contenedor aleContenedor;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "facultad_id")
-    private Facultad facultad;
+    @JoinColumn(name = "ale_facultad_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Facultad aleFacultad;
 
-    @Column(name = "mensaje", nullable = false, length = 500)
-    private String mensaje;
+    @Column(name = "ale_mensaje", nullable = false, length = 500)
+    private String aleMensaje;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "nivel_urgencia", nullable = false, length = 20)
-    private NivelUrgencia nivelUrgencia = NivelUrgencia.MEDIA;
+    @Column(name = "ale_nivel_urgencia", nullable = false, length = 20)
+    private NivelUrgencia aleNivelUrgencia = NivelUrgencia.MEDIA;
 
-    @Column(name = "leida", nullable = false)
-    private Boolean leida = false;
+    @Column(name = "ale_leida", nullable = false)
+    private Boolean aleLeida = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "leida_por")
-    private Usuario leidaPor;
+    @JoinColumn(name = "ale_leida_por")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Usuario aleLeidaPor;
 
-    @Column(name = "leida_en")
-    private LocalDateTime leidaEn;
+    @Column(name = "ale_leida_en")
+    private LocalDateTime aleLeidaEn;
 
-    @Column(name = "generada_en", nullable = false)
-    private LocalDateTime generadaEn = LocalDateTime.now();
+    @Column(name = "ale_generada_en", nullable = false)
+    private LocalDateTime aleGeneradaEn = LocalDateTime.now();
 
     @PrePersist
     protected void onCreate(){
-        this.generadaEn = LocalDateTime.now();
+        this.aleGeneradaEn = LocalDateTime.now();
     }
 }

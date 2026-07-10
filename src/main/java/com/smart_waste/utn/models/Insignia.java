@@ -3,8 +3,12 @@ package com.smart_waste.utn.models;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.smart_waste.utn.models.enums.CriterioTipo;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,32 +27,36 @@ public class Insignia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    @Column(name = "ins_id", nullable = false)
+    private Integer insId;
 
-    @Column(name = "nombre", nullable = false, unique = true, length = 100)
-    private String nombre;
+    @Column(name = "ins_nombre", nullable = false, unique = true, length = 100)
+    private String insNombre;
 
-    @Column(name = "descripcion", length = 300)
-    private String descripcion;
+    @Column(name = "ins_descripcion", length = 300)
+    private String insDescripcion;
 
-    @Column(name = "icono_base64", columnDefinition = "TEXT")
-    private String iconoBase64;
+    @Column(name = "ins_icono_url", length = 500)
+    private String insIconoUrl;
 
-    @Column(name = "color_hex", nullable = false, length = 7)
-    private String colorHex = "#2ECC71";
+    @Column(name = "ins_color_hex", length = 7)
+    private String insColorHex = "#2ECC71";
 
-    @Column(name = "criterio_valor", precision = 10, scale = 2, nullable = false)
-    private BigDecimal criterioValor = BigDecimal.ONE;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ins_criterio_tipo", nullable = false, length = 50)
+    private CriterioTipo insCriterioTipo;
 
-    @Column(name = "activa", nullable = false)
-    private Boolean activa = true;
+    @Column(name = "ins_criterio_valor", precision = 10, scale = 2, nullable = false)
+    private BigDecimal insCriterioValor = BigDecimal.ONE;
 
-    @Column(name = "creado_en", nullable = false, updatable = false)
-    private LocalDateTime creadoEn = LocalDateTime.now();
+    @Column(name = "ins_activa", nullable = false)
+    private Boolean insActiva = true;
+
+    @Column(name = "ins_creado_en", nullable = false)
+    private LocalDateTime insCreado = LocalDateTime.now();
 
     @PrePersist
     protected void onCreate(){
-        this.creadoEn = LocalDateTime.now();
+        this.insCreado = LocalDateTime.now();
     }
 }

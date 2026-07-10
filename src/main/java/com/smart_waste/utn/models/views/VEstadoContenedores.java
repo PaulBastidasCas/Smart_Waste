@@ -1,25 +1,22 @@
-package com.smart_waste.utn.models.vistas;
+package com.smart_waste.utn.models.views;
 
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.Immutable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.Immutable;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Data;
-
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Immutable
 @Table(name = "v_estado_contenedores")
-public class VEstadoContenedor {
+public class VEstadoContenedores {
 
     @Id
     @Column(name = "contenedor_id")
-    private Integer contenedorID;
+    private Integer contenedorId;
 
     @Column(name = "contenedor_codigo")
     private String contenedorCodigo;
@@ -51,10 +48,10 @@ public class VEstadoContenedor {
     @Column(name = "descripcion_ubicacion")
     private String descripcionUbicacion;
 
-    @Column(name = "latitud")
+    @Column(name = "latitud", precision = 10, scale = 8)
     private BigDecimal latitud;
 
-    @Column(name = "longitud")
+    @Column(name = "longitud", precision = 10, scale = 8)
     private BigDecimal longitud;
 
     @Column(name = "ultima_actualizacion")

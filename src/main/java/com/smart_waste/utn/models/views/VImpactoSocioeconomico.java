@@ -1,20 +1,19 @@
-package com.smart_waste.utn.models.vistas;
+package com.smart_waste.utn.models.views;
 
-import java.math.BigDecimal;
+import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.Immutable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Data;
+import java.math.BigDecimal;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Immutable
 @Table(name = "v_impacto_socioeconomico")
 public class VImpactoSocioeconomico {
 
-    @Id 
+    @Id
     @Column(name = "tipo_residuo")
     private String tipoResiduo;
 

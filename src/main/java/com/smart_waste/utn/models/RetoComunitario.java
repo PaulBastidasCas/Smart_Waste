@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.smart_waste.utn.models.enums.EstadoReto;
+import com.smart_waste.utn.models.enums.RetoEstado;
 import com.smart_waste.utn.models.enums.TipoMeta;
 
 import jakarta.persistence.Column;
@@ -19,9 +19,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -32,61 +36,69 @@ public class RetoComunitario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    @Column(name = "ret_id", nullable = false)
+    private Integer retId;
 
-    @Column(name = "titulo", nullable = false, length = 200)
-    private String titulo;
+    @Column(name = "ret_titulo", nullable = false, length = 200)
+    private String retTitulo;
 
-    @Column(name = "descripcion", length = 500)
-    private String descripcion;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "facultad_id")
-    private Facultad facultad;
+    @Column(name = "ret_descripcion", length = 500)
+    private String retDescripcion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tipo_residuo_id")
-    private TipoResiduo tipoResiduo;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JoinColumn(name = "ret_facultad_id")
+    private Facultad retFacultad;
 
-    @Column(name = "meta_kg", precision = 10, scale = 3)
-    private BigDecimal metaKg;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JoinColumn(name = "ret_tipo_residuo_id")
+    private TipoResiduo retTipoResiduo;
 
-    @Column(name = "meta_porcentaje", precision = 5, scale = 2)
-    private BigDecimal metaPorcentaje;
+    @Column(name = "ret_meta_kg", precision = 10, scale = 3)
+    private BigDecimal retMetaKg;
+
+    @Column(name = "ret_meta_porcentaje", precision = 5, scale = 2)
+    private BigDecimal retMetaPorcentaje;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_meta", nullable = false, length = 30)
-    private TipoMeta tipoMeta = TipoMeta.REDUCCION;
+    @Column(name = "ret_tipo_meta", length = 30, nullable = false)
+    private TipoMeta retTipoMeta = TipoMeta.REDUCCION;
 
-    @Column(name = "progreso_actual_kg", precision = 10, scale = 3, nullable = false)
-    private BigDecimal progresoActual = BigDecimal.ZERO;
+    @Column(name = "ret_progreso_actual_kg", precision = 10, scale = 3, nullable = false)
+    private BigDecimal retProgresoActualKg = BigDecimal.ZERO;
 
-    @Column(name = "progreso_pct", precision = 5, scale = 2, nullable = false)
-    private BigDecimal progresoPCT = BigDecimal.ZERO;
+    @Min(value = 0)
+    @Max(value = 100)
+    @Column(name = "ret_progreso_pct", precision = 5, scale = 2, nullable = false)
+    private BigDecimal retProgresoPct = BigDecimal.ZERO;
 
-    @Column(name = "fecha_inicio", nullable = false)
-    private LocalDate fechaInicio;
+    @Column(name = "ret_fecha_inicio", nullable = false)
+    private LocalDate retFechaInicio;
 
-    @Column(name = "fecha_fin", nullable = false)
-    private LocalDate fechaFin;
+    @Column(name = "ret_fecha_fin", nullable = false)
+    private LocalDate retFechaFin;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado", nullable = false, length = 20)
-    private EstadoReto estadoReto = EstadoReto.ACTIVO;
+    @Column(name = "ret_estado", nullable = false)
+    private RetoEstado retEstado = RetoEstado.ACTIVO;
 
-    @Column(name = "publico", nullable = false)
-    private Boolean publico = true;
+    @Column(name = "ret_publico", nullable = false)
+    private Boolean retPublico = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "creado_por")
-    private Usuario creadoPor;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JoinColumn(name = "ret_creado_por")
+    private Usuario retCreado;
 
-    @Column(name = "creado_en", nullable = false, updatable = false)
-    private LocalDateTime creadoEn = LocalDateTime.now();
+    @Column(name = "ret_creado_en", nullable = false)
+    private LocalDateTime retCreadoEn = LocalDateTime.now();
 
     @PrePersist
     protected void onCreate(){
-        this.creadoEn = LocalDateTime.now();
+        this.retCreadoEn = LocalDateTime.now();
     }
 }

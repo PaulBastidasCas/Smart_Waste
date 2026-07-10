@@ -3,8 +3,8 @@ package com.smart_waste.utn.models;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.smart_waste.utn.models.enums.EstadoLLeno;
-import com.smart_waste.utn.models.enums.Operativo;
+import com.smart_waste.utn.models.enums.EstadoLlenado;
+import com.smart_waste.utn.models.enums.EstadoOperativo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,9 +19,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -32,58 +36,65 @@ public class Contenedor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "con_id", nullable = false)
+    private Integer conId;
 
-    @Column(name = "codigo", nullable = false, unique = true, length = 30)
-    private String codigo;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "facultad_id", nullable = false)
-    private Facultad facultad;
+    @Column(name = "con_codigo", nullable = false, unique = true, length = 30)
+    private String conCodigo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tipo_residuo_id", nullable = false)
-    private TipoResiduo tipoResiduo;
+    @JoinColumn(name = "con_facultad_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Facultad conFacultad;
 
-    @Column(name = "descripcion_ubicacion", length = 200)
-    private String descripcionUbicacion;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "con_tipo_residuo_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private TipoResiduo conTipoResiduo;
+
+    @Column(name = "con_descripcion_ubicacion", length = 200)
+    private String conDescripcionUbicacion;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado_operativo", nullable = false, length = 30)
-    private Operativo estadoOperativo = Operativo.OPERATIVO;
+    @Column(name = "con_estado_operativo", nullable = false)
+    private EstadoOperativo conEstadoOperativo = EstadoOperativo.OPERATIVO;
 
-    @Column(name = "nivel_llenado_pct", nullable = false)
-    private Integer nivelLlenadoPct = 0;
+    @Min(value = 0)
+    @Max(value = 100)
+    @Column(name = "con_nivel_llenado_pct", nullable = false)
+    private Integer conNivelLlenadoPct = 0;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado_llenado", nullable = false, length = 20)
-    private EstadoLLeno estadoLlenado = EstadoLLeno.VACIO;
+    @Column(name = "con_estado_llenado", nullable = false, length = 20, insertable = false, updatable = false)
+    private EstadoLlenado conEstadoLlenado;
 
-    @Column(name = "capacidad_litros", precision = 8, scale = 2)
-    private BigDecimal capacidadLitros;
+    @Column(name = "con_capacidad_litros", precision = 8, scale = 2)
+    private BigDecimal conCapacidadLitros;
 
-    @Column(name = "activo", nullable = false)
-    private Boolean activo = true;
+    @Column(name = "con_activo", nullable = false)
+    private Boolean conActivo = true;
 
-    @Column(name = "latitud", precision = 10, scale = 8)
-    private BigDecimal latitud;
+    @Column(name = "con_latitud", precision = 10, scale = 8)
+    private BigDecimal conLatitud;
 
-    @Column(name = "longitud", precision = 11, scale = 8)
-    private BigDecimal longitud;
+    @Column(name = "con_longitud", precision = 11, scale = 8)
+    private BigDecimal conLongitud;
 
-    @Column(name = "creado_en", nullable = false)
-    private LocalDateTime creadoEn = LocalDateTime.now();
+    @Column(name = "con_creado_en", nullable = false)
+    private LocalDateTime conCreado = LocalDateTime.now();
 
-    @Column(name = "actualizado_en", nullable = false)
-    private LocalDateTime actualizadoEn = LocalDateTime.now();
+    @Column(name = "con_actualizado_en", nullable = false)
+    private LocalDateTime conActualizado = LocalDateTime.now();
 
     @PrePersist
     protected void onCreate(){
-        this.actualizadoEn = LocalDateTime.now();
+        this.conCreado = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate(){
-        this.actualizadoEn = LocalDateTime.now();
+        this.conActualizado = LocalDateTime.now();
     }
 }

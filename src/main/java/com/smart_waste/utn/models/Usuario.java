@@ -3,21 +3,22 @@ package com.smart_waste.utn.models;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.smart_waste.utn.models.enums.Rol;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -28,45 +29,61 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;
+    @Column(name = "usu_id", nullable = false)
+    private UUID usuId;
 
-    @Column(name = "nombre", nullable = false, length = 100)
-    private String nombre;
+    @Column(name = "usu_identificacion", unique = true, length = 20)
+    private String usuIdentificacion;
 
-    @Column(name = "apellido", nullable = false, length = 100)
-    private String apellido;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usu_tipo_identificacion_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private TipoIdentificacion tipoIdentificacion;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usu_rol_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Rol rol;
 
-    @Column(name = "correo", nullable = false, length = 150, unique = true)
-    private String correo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usu_facultad_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Facultad Facultad;
 
-    @Column(name = "password_hash", nullable = false, length = 255)
-    private String passwordHash;
+    @Column(name = "usu_nombre", nullable = false, length = 100)
+    private String usuNombre;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "rol", nullable = false, length = 30)
-    private Rol rol = Rol.ROLE_ESTUDIANTE;
+    @Column(name = "usu_apellido", nullable = false, length = 100)
+    private String usuApellido;
 
-    @Column(name = "activo", nullable = false)
-    private Boolean activo = true;
+    @Column(name = "usu_correo", nullable = false, length = 150, unique = true)
+    private String usuCorreo;
 
-    @Column(name = "ultimo_login")
-    private LocalDateTime ultimoLogin;
+    @Column(name = "usu_password_hash", nullable = false, length = 255)
+    private String usuPasswordHash;
 
-    @Column(name = "creado_en", nullable = false)
-    private LocalDateTime creadoEn = LocalDateTime.now();
+    @Column(name = "usu_activo", nullable = false)
+    private Boolean usuActivo = true;
 
-    @Column(name = "actualizado_en", nullable = false)
-    private LocalDateTime actualizadoEn = LocalDateTime.now();
+    @Column(name = "usu_ultimo_login")
+    private LocalDateTime usuUltimoLogin;
+
+    @Column(name = "usu_creado_en", nullable = false)
+    private LocalDateTime usuCreado = LocalDateTime.now();
+
+    @Column(name = "usu_actualizado_en", nullable = false)
+    private LocalDateTime usuActualizado = LocalDateTime.now();
 
     @PrePersist
-    protected void onCreate() {
-        this.creadoEn = LocalDateTime.now();
-        this.actualizadoEn = LocalDateTime.now();
+    protected void onCreate(){
+        this.usuCreado = LocalDateTime.now();
     }
 
     @PreUpdate
-    protected void onUpdate() {
-        this.actualizadoEn = LocalDateTime.now();
+    protected void onUpdate(){
+        this.usuActualizado = LocalDateTime.now();
     }
 }

@@ -1,6 +1,6 @@
 package com.smart_waste.utn.models.enums;
 
-public enum EstadoReto {
+public enum RetoEstado {
     ACTIVO,
     COMPLETADO,
     VENCIDO,

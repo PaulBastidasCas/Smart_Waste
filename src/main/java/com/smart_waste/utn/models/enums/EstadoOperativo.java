@@ -1,6 +1,6 @@
 package com.smart_waste.utn.models.enums;
 
-public enum Operativo {
+public enum EstadoOperativo {
     OPERATIVO,
     REQUIERE_MANTENIMIENTO,
     FUERA_DE_SERVICIO
