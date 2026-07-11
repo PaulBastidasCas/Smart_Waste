@@ -6,4 +6,5 @@ import com.smart_waste.utn.models.TokenRevocado;
 
 public interface TokenRevocadoRepository extends JpaRepository<TokenRevocado, Long>{
 
+    boolean existsByTokJti(String tokJti);
 }
