@@ -39,19 +39,19 @@ public class Usuario {
     @JoinColumn(name = "usu_tipo_identificacion_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private TipoIdentificacion tipoIdentificacion;
+    private TipoIdentificacion usuTipoIdentificacion;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usu_rol_id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Rol rol;
+    private Rol usuRol;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usu_facultad_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Facultad Facultad;
+    private Facultad usuFacultad;
 
     @Column(name = "usu_nombre", nullable = false, length = 100)
     private String usuNombre;

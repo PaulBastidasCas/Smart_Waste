@@ -1,5 +1,8 @@
 package com.smart_waste.utn.repositories.viewsRepositories;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.smart_waste.utn.models.views.VFeedInsigniasUsuario;
@@ -7,4 +10,5 @@ import com.smart_waste.utn.models.views.VFeedInsigniasUsuarioId;
 
 public interface VFeedInsigniasUsuarioRepository extends JpaRepository<VFeedInsigniasUsuario, VFeedInsigniasUsuarioId>{
 
+    List<VFeedInsigniasUsuario> findByUsuId(UUID usuarioId);
 }
