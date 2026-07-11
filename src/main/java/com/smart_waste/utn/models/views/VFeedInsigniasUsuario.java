@@ -3,17 +3,9 @@ package com.smart_waste.utn.models.views;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Immutable;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-class VFeedInsigniasUsuarioId implements Serializable {
-    private UUID usuId;
-    private Integer insId;
-}
 
 @Data
 @NoArgsConstructor
