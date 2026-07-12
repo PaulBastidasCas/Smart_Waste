@@ -30,11 +30,12 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final EmailService emailService;
 
     public AuthService(UsuarioRepository usuarioRepository, RolRepository rolRepository,
                        FacultadRepository facultadRepository, TipoIdentificacionRepository tipoIdentificacionRepository,
                        PasswordEncoder passwordEncoder, JwtService jwtService,
-                       AuthenticationManager authenticationManager) {
+                       AuthenticationManager authenticationManager, EmailService emailService) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
         this.facultadRepository = facultadRepository;
@@ -42,6 +43,7 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.emailService = emailService;
     }
 
     @SuppressWarnings("null")
@@ -72,6 +74,8 @@ public class AuthService {
             usuario.setUsuFacultad(facultadRepository.findById(request.getFacultadId()).orElse(null));
         }
 
+        emailService.enviarCorreoBienvenida(usuario.getUsuCorreo(), usuario.getUsuNombre());
+
         usuarioRepository.save(usuario);
 
         String token = jwtService.generarToken(new UsuarioPersonalizadoDetalles(usuario));
@@ -91,5 +95,23 @@ public class AuthService {
 
         String token = jwtService.generarToken(new UsuarioPersonalizadoDetalles(usuario));
         return new AuthResponse(token);
+    }
+
+    public void solicitarRecuperacion(String correo) {
+        Usuario usuario = usuarioRepository.findByUsuCorreo(correo)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
+        String token = jwtService.generarToken(new UsuarioPersonalizadoDetalles(usuario));
+        emailService.enviarCorreoRecuperacion(correo, token);
+    }
+
+    public void restablecerPassword(String token, String nuevaClave) {
+        String correo = jwtService.extraerCorreo(token); 
+        
+        Usuario usuario = usuarioRepository.findByUsuCorreo(correo)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
+        usuario.setUsuPasswordHash(passwordEncoder.encode(nuevaClave));
+        usuarioRepository.save(usuario);
     }
 }
