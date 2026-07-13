@@ -76,8 +76,8 @@ public class RegistroRecoleccion {
     @Column(name = "reg_descripcion_error", length = 300)
     private String regDescripcionError;
 
-    @Column(name = "reg_foto_url", length = 500)
-    private String regFotoUrl;
+    @Column(name = "reg_foto_base64", columnDefinition = "TEXT")
+    private String regFotoBase64;
 
     @Column(name = "reg_observaciones", length = 500)
     private String regObservaciones;

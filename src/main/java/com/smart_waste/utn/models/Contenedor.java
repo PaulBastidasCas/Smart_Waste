@@ -3,6 +3,7 @@ package com.smart_waste.utn.models;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.smart_waste.utn.models.enums.EstadoLlenado;
 import com.smart_waste.utn.models.enums.EstadoOperativo;
 
@@ -44,12 +45,14 @@ public class Contenedor {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "con_facultad_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Facultad conFacultad;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "con_tipo_residuo_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private TipoResiduo conTipoResiduo;
@@ -67,7 +70,7 @@ public class Contenedor {
     private Integer conNivelLlenadoPct = 0;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "con_estado_llenado", nullable = false, length = 20, insertable = false, updatable = false)
+    @Column(name = "con_estado_llenado", nullable = false, length = 20)
     private EstadoLlenado conEstadoLlenado;
 
     @Column(name = "con_capacidad_litros", precision = 8, scale = 2)

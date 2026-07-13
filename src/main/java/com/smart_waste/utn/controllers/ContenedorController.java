@@ -23,6 +23,11 @@ public class ContenedorController {
         return ResponseEntity.ok(contenedorService.listarActivos());
     }
 
+    @GetMapping("/facultad/{facultadId}")
+    public ResponseEntity<List<Contenedor>> listarPorFacultad(@PathVariable Integer facultadId) {
+        return ResponseEntity.ok(contenedorService.listarPorFacultad(facultadId));
+    }
+
     @PostMapping("/{id}/simular-nivel")
     public ResponseEntity<Void> simularLecturaNivel(@PathVariable @NonNull Integer id, @RequestParam Integer nuevoNivelPct) {
         contenedorService.simularLecturaNivel(id, nuevoNivelPct);

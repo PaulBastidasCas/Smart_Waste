@@ -4,6 +4,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.smart_waste.utn.models.Usuario;
 import com.smart_waste.utn.repositories.UsuarioRepository;
@@ -18,6 +19,7 @@ public class DetalleUsuarioService implements UserDetailsService{
     }
 
     @Override
+    @Transactional 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
        Usuario usuario = usuarioRepository.findByUsuCorreo(username)
        .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));

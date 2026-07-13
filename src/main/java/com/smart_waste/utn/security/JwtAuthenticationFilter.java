@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter{
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final DetalleUsuarioService detalleUsuarioService;
@@ -36,11 +36,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+
+        if (path.contains("/api/auth") || path.contains("/api/catalogos")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String correoUsuario;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            System.out.println("⚠️ No se recibió Token en la ruta protegida: " + path);
             filterChain.doFilter(request, response);
             return;
         }
@@ -52,6 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             String jti = jwtService.extraerJti(jwt);
 
             if (tokenRevocadoRepository.existsByTokJti(jti)) {
+                System.out.println("❌ Token revocado intentó acceder.");
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token revocado");
                 return;
             }
@@ -64,9 +73,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                             userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                    System.out.println("✅ Token validado para usuario: " + correoUsuario);
+                } else {
+                    System.out.println("❌ Token inválido para usuario: " + correoUsuario);
                 }
             }
         } catch (Exception e) {
+            System.out.println("❌ Error crítico validando el token: " + e.getMessage());
             SecurityContextHolder.clearContext();
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token JWT inválido o expirado");
             return;
@@ -74,5 +87,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         
         filterChain.doFilter(request, response);
     }
-
 }

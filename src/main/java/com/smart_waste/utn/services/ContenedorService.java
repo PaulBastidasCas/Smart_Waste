@@ -23,6 +23,10 @@ public class ContenedorService {
         return contenedorRepository.findByConActivoTrue(); 
     }
 
+    public List<Contenedor> listarPorFacultad(Integer facultadId) {
+        return contenedorRepository.findByConFacultad_FacId(facultadId);
+    }
+    
     @Transactional
     public void simularLecturaNivel(@NonNull Integer contenedorId, Integer nuevoNivelPct) {
         Contenedor contenedor = contenedorRepository.findById(contenedorId)

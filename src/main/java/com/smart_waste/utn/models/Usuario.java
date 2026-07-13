@@ -41,7 +41,7 @@ public class Usuario {
     @EqualsAndHashCode.Exclude
     private TipoIdentificacion usuTipoIdentificacion;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usu_rol_id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -64,6 +64,9 @@ public class Usuario {
 
     @Column(name = "usu_password_hash", nullable = false, length = 255)
     private String usuPasswordHash;
+
+    @Column(name = "usu_fotoperfil_base64", columnDefinition = "TEXT")
+    private String usuFotoPerfilBase64;
 
     @Column(name = "usu_activo", nullable = false)
     private Boolean usuActivo = true;

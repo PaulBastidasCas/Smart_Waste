@@ -39,8 +39,8 @@ public class VFeedInsigniasUsuario {
     @Column(name = "ins_descripcion")
     private String insDescripcion;
 
-    @Column(name = "ins_icono_url")
-    private String insIconoUrl;
+    @Column(name = "ins_icono_base64")
+    private String insIconoBase64;
 
     @Column(name = "ins_color_hex")
     private String insColorHex;

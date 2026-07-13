@@ -36,8 +36,8 @@ public class Insignia {
     @Column(name = "ins_descripcion", length = 300)
     private String insDescripcion;
 
-    @Column(name = "ins_icono_url", length = 500)
-    private String insIconoUrl;
+    @Column(name = "ins_icono_base64", columnDefinition = "TEXT")
+    private String insIconoBase64;
 
     @Column(name = "ins_color_hex", length = 7)
     private String insColorHex = "#2ECC71";
