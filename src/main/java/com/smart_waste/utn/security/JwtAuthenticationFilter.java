@@ -16,8 +16,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
@@ -48,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String correoUsuario;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            System.out.println("⚠️ No se recibió Token en la ruta protegida: " + path);
+            log.warn("No se recibió Token en la ruta protegida: {}", path);
             filterChain.doFilter(request, response);
             return;
         }
@@ -60,7 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jti = jwtService.extraerJti(jwt);
 
             if (tokenRevocadoRepository.existsByTokJti(jti)) {
-                System.out.println("❌ Token revocado intentó acceder.");
+                log.warn("Intento de acceso con token revocado (JTI: {})", jti);
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token revocado");
                 return;
             }
@@ -73,13 +75,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
-                    System.out.println("✅ Token validado para usuario: " + correoUsuario);
+                    log.info("Token validado para usuario: {}", correoUsuario);
                 } else {
-                    System.out.println("❌ Token inválido para usuario: " + correoUsuario);
+                    log.warn("Token inválido para usuario: {}", correoUsuario);
                 }
             }
         } catch (Exception e) {
-            System.out.println("❌ Error crítico validando el token: " + e.getMessage());
+            log.error("Error crítico validando el token: {}", e.getMessage());
             SecurityContextHolder.clearContext();
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token JWT inválido o expirado");
             return;

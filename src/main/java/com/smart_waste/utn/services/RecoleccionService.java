@@ -3,11 +3,12 @@ package com.smart_waste.utn.services;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.smart_waste.utn.exceptions.ResourceNotFoundException;
 import com.smart_waste.utn.models.Contenedor;
 import com.smart_waste.utn.models.RegistroRecoleccion;
 import com.smart_waste.utn.models.Usuario;
@@ -23,6 +24,12 @@ public class RecoleccionService {
     private final ContenedorRepository contenedorRepository;
     private final UsuarioRepository usuarioRepository;
 
+    @Value("${app.contenedor.umbral.critico}")
+    private int umbralCritico;
+
+    @Value("${app.contenedor.umbral.medio}")
+    private int umbralMedio;
+
     public RecoleccionService(RegistroRecoleccionRepository registroRecoleccionRepository, 
                               ContenedorRepository contenedorRepository,
                               UsuarioRepository usuarioRepository) {
@@ -32,14 +39,20 @@ public class RecoleccionService {
     }
 
     @Transactional
-    public RegistroRecoleccion registrarVaciado(@NonNull Integer contenedorId, Double cantidadRecolectada, String observaciones) {
+    public RegistroRecoleccion registrarVaciado(
+            @NonNull Integer contenedorId, 
+            Double cantidadRecolectada, 
+            String observaciones, 
+            String fotoBase64, 
+            Boolean tieneClasificacionErronea, 
+            String descripcionError,           
+            String correoEncargado) {
 
-        String correoAutenticado = SecurityContextHolder.getContext().getAuthentication().getName();
-        Usuario encargado = usuarioRepository.findByUsuCorreo(correoAutenticado) 
-            .orElseThrow(() -> new RuntimeException("Usuario encargado no encontrado en la base de datos"));
+        Usuario encargado = usuarioRepository.findByUsuCorreo(correoEncargado) 
+            .orElseThrow(() -> new ResourceNotFoundException("Usuario encargado no encontrado en la base de datos"));
 
         Contenedor contenedor = contenedorRepository.findById(contenedorId)
-            .orElseThrow(() -> new RuntimeException("Contenedor no encontrado"));
+            .orElseThrow(() -> new ResourceNotFoundException("Contenedor no encontrado"));
 
         double capacidad = contenedor.getConCapacidadLitros().doubleValue();
         int porcentajeActual = contenedor.getConNivelLlenadoPct();
@@ -49,8 +62,8 @@ public class RecoleccionService {
         int nuevoPorcentaje = (int) Math.round((nuevoVolumen / capacidad) * 100.0);
 
         EstadoLlenado nuevoEstado = EstadoLlenado.VACIO;
-        if (nuevoPorcentaje >= 80) nuevoEstado = EstadoLlenado.CRITICO;
-        else if (nuevoPorcentaje >= 40) nuevoEstado = EstadoLlenado.MEDIO;
+        if (nuevoPorcentaje >= umbralCritico) nuevoEstado = EstadoLlenado.CRITICO;
+        else if (nuevoPorcentaje >= umbralMedio) nuevoEstado = EstadoLlenado.MEDIO;
 
         contenedor.setConNivelLlenadoPct(nuevoPorcentaje);
         contenedor.setConEstadoLlenado(nuevoEstado);
@@ -66,6 +79,10 @@ public class RecoleccionService {
         
         registro.setRegPesoEstimadoKg(BigDecimal.valueOf(cantidadRecolectada)); 
         registro.setRegObservaciones(observaciones);
+        registro.setRegFotoBase64(fotoBase64);
+        
+        registro.setRegTieneClasificacionErronea(tieneClasificacionErronea != null ? tieneClasificacionErronea : false);
+        registro.setRegDescripcionError(descripcionError);
 
         return registroRecoleccionRepository.save(registro);
     }

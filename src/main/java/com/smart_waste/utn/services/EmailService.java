@@ -1,5 +1,6 @@
 package com.smart_waste.utn.services;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     private final JavaMailSender mailSender;
+
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
 
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
@@ -28,7 +32,9 @@ public class EmailService {
         SimpleMailMessage mensaje = new SimpleMailMessage();
         mensaje.setTo(destino);
         mensaje.setSubject("Recuperación de Contraseña - UTN Smart Waste");
-        String urlRecuperacion = "http://localhost:5173/reset-password?token=" + token;
+        
+        String urlRecuperacion = frontendUrl + "/reset-password?token=" + token;
+        
         mensaje.setText("Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace:\n\n" 
                 + urlRecuperacion + "\n\nSi no fuiste tú, ignora este mensaje.");
         mailSender.send(mensaje);

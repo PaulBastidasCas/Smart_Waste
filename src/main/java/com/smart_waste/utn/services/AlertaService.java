@@ -2,6 +2,7 @@ package com.smart_waste.utn.services;
 
 import com.smart_waste.utn.models.AlertaSistema;
 import com.smart_waste.utn.repositories.AlertaSistemaRepository;
+import com.smart_waste.utn.exceptions.ResourceNotFoundException;
 
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class AlertaService {
     @Transactional
     public void resolverAlerta(@NonNull Long alertaId) { 
         AlertaSistema alerta = alertaSistemaRepository.findById(alertaId)
-                .orElseThrow(() -> new RuntimeException("Alerta no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Alerta no encontrada"));
         
         alerta.setAleLeida(true);
         alerta.setAleLeidaEn(LocalDateTime.now());

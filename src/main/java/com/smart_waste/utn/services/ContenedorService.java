@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.smart_waste.utn.models.Contenedor;
 import com.smart_waste.utn.repositories.ContenedorRepository;
+import com.smart_waste.utn.exceptions.ResourceNotFoundException;
 
 @Service
 public class ContenedorService {
@@ -30,7 +31,7 @@ public class ContenedorService {
     @Transactional
     public void simularLecturaNivel(@NonNull Integer contenedorId, Integer nuevoNivelPct) {
         Contenedor contenedor = contenedorRepository.findById(contenedorId)
-                .orElseThrow(() -> new RuntimeException("Contenedor no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Contenedor no encontrado"));
         
         contenedor.setConNivelLlenadoPct(nuevoNivelPct);
         contenedorRepository.save(contenedor);

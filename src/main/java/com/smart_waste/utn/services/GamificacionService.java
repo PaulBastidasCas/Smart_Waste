@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.smart_waste.utn.models.RankingFacultadMensual;
 import com.smart_waste.utn.models.RetoComunitario;
+import com.smart_waste.utn.models.enums.RetoEstado;
 import com.smart_waste.utn.models.views.VFeedInsigniasUsuario;
 import com.smart_waste.utn.repositories.RankingFacultadMensualRepository;
 import com.smart_waste.utn.repositories.RetoComunitarioRepository;
@@ -30,7 +31,7 @@ public class GamificacionService {
 
     @Transactional(readOnly = true)
     public List<RetoComunitario> listarRetosActivos() {
-        return retoComunitarioRepository.findByRetEstado("ACTIVO");
+        return retoComunitarioRepository.findByRetEstado(RetoEstado.ACTIVO);
     }
 
     @Transactional(readOnly = true)

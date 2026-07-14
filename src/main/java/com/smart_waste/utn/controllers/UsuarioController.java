@@ -1,17 +1,15 @@
 package com.smart_waste.utn.controllers;
 
-import java.util.List;
-import java.util.UUID;
-
+import com.smart_waste.utn.models.Usuario;
+import com.smart_waste.utn.models.dto.ActualizarFotoRequest;
+import com.smart_waste.utn.services.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.smart_waste.utn.models.Usuario;
-import com.smart_waste.utn.services.UsuarioService;
+import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -31,5 +29,17 @@ public class UsuarioController {
     @GetMapping("/facultad/{facultadId}")
     public ResponseEntity<List<Usuario>> listarPorFacultad(@PathVariable Integer facultadId) {
         return ResponseEntity.ok(usuarioService.listarPorFacultad(facultadId));
+    }
+
+    @PatchMapping("/{id}/foto-perfil")
+    public ResponseEntity<Map<String, Object>> actualizarFotoPerfil(
+            @PathVariable @NonNull UUID id, 
+            @Valid @RequestBody ActualizarFotoRequest payload) {
+        
+        Usuario usuarioActualizado = usuarioService.actualizarFotoPerfil(id, payload.getFotoBase64());
+        return ResponseEntity.ok(Map.of(
+            "mensaje", "Foto de perfil actualizada exitosamente",
+            "usuarioId", usuarioActualizado.getUsuId()
+        ));
     }
 }

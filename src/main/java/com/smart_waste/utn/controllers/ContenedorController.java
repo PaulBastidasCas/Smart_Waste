@@ -5,8 +5,8 @@ import com.smart_waste.utn.services.ContenedorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/contenedores")
@@ -29,7 +29,15 @@ public class ContenedorController {
     }
 
     @PostMapping("/{id}/simular-nivel")
-    public ResponseEntity<Void> simularLecturaNivel(@PathVariable @NonNull Integer id, @RequestParam Integer nuevoNivelPct) {
+    public ResponseEntity<Void> simularLecturaNivel(
+            @PathVariable @NonNull Integer id, 
+            @RequestBody Map<String, Integer> payload) {
+        
+        Integer nuevoNivelPct = payload.get("nuevoNivelPct");
+        if (nuevoNivelPct == null) {
+            throw new IllegalArgumentException("El nivel de llenado es obligatorio");
+        }
+        
         contenedorService.simularLecturaNivel(id, nuevoNivelPct);
         return ResponseEntity.ok().build();
     }
