@@ -33,13 +33,22 @@ public class UsuarioController {
 
     @PatchMapping("/{id}/foto-perfil")
     public ResponseEntity<Map<String, Object>> actualizarFotoPerfil(
-            @PathVariable @NonNull UUID id, 
+            @PathVariable @NonNull UUID id,
             @Valid @RequestBody ActualizarFotoRequest payload) {
-        
+
         Usuario usuarioActualizado = usuarioService.actualizarFotoPerfil(id, payload.getFotoBase64());
         return ResponseEntity.ok(Map.of(
-            "mensaje", "Foto de perfil actualizada exitosamente",
-            "usuarioId", usuarioActualizado.getUsuId()
-        ));
+                "mensaje", "Foto de perfil actualizada exitosamente",
+                "usuarioId", usuarioActualizado.getUsuId()));
+    }
+
+    @GetMapping("/correo/{correo:.+}")
+    public ResponseEntity<Usuario> obtenerPorCorreo(@PathVariable String correo) {
+        return ResponseEntity.ok(usuarioService.obtenerPorCorreo(correo));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<Usuario> obtenerMiPerfil(@RequestParam("correo") String correo) {
+        return ResponseEntity.ok(usuarioService.obtenerPorCorreo(correo));
     }
 }

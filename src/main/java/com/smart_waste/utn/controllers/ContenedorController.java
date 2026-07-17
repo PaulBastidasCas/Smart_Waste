@@ -41,4 +41,18 @@ public class ContenedorController {
         contenedorService.simularLecturaNivel(id, nuevoNivelPct);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/{id}/simular-sensor")
+    public ResponseEntity<Map<String, Object>> simularSensorIoT(
+            @PathVariable Integer id,
+            @RequestBody Map<String, Object> payload) {
+        
+        Double pesoAgregado = Double.valueOf(payload.get("pesoAgregado").toString());
+        Boolean reportarError = (Boolean) payload.get("reportarError");
+        String descripcionError = (String) payload.get("descripcionError");
+
+        contenedorService.actualizarPesoSensor(id, pesoAgregado, reportarError, descripcionError);
+
+        return ResponseEntity.ok(Map.of("mensaje", "Datos del sensor actualizados exitosamente"));
+    }
 }

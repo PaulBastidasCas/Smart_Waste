@@ -38,4 +38,10 @@ public class UsuarioService {
         usuario.setUsuFotoPerfilBase64(fotoBase64);
         return usuarioRepository.save(usuario);
     }
+
+   @Transactional(readOnly = true)
+    public Usuario obtenerPorCorreo(@NonNull String correo){
+        return usuarioRepository.findByUsuCorreo(correo)
+        .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con correo: " + correo));
+    }
 }
