@@ -3,6 +3,7 @@ package com.smart_waste.utn.models;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,6 +38,7 @@ public class Usuario {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usu_tipo_identificacion_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private TipoIdentificacion usuTipoIdentificacion;
@@ -49,6 +51,7 @@ public class Usuario {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usu_facultad_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Facultad usuFacultad;

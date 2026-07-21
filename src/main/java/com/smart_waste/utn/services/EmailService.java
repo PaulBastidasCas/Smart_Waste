@@ -39,4 +39,22 @@ public class EmailService {
                 + urlRecuperacion + "\n\nSi no fuiste tú, ignora este mensaje.");
         mailSender.send(mensaje);
     }
+
+    @Async("emailExecutor")
+    public void enviarCorreoAOperador(String destino, String asunto, String mensajeCuerpo, String nombreAdmin, String correoAdmin) {
+        SimpleMailMessage mensaje = new SimpleMailMessage();
+        mensaje.setTo(destino);
+        mensaje.setReplyTo(correoAdmin);
+        mensaje.setSubject("Smart Waste UTN - " + asunto);
+        
+        String cuerpo = "Hola,\n\n"
+                + "Has recibido un mensaje del administrador " + nombreAdmin + " (" + correoAdmin + ") "
+                + "respecto a una recolección reciente en el campus:\n\n"
+                + "\"" + mensajeCuerpo + "\"\n\n"
+                + "Por favor, comunícate directamente respondiendo a este correo.\n\n"
+                + "Saludos,\nSistema UTN Smart Waste";
+                
+        mensaje.setText(cuerpo);
+        mailSender.send(mensaje);
+    }
 }

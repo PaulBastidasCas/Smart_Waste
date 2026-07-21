@@ -91,6 +91,7 @@ public class AuthService {
         return new AuthResponse(token);
     }
 
+    @Transactional
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getCorreo(), request.getPassword())
@@ -106,6 +107,7 @@ public class AuthService {
         return new AuthResponse(token);
     }
 
+    @Transactional(readOnly = true)
     public void solicitarRecuperacion(String correo) {
         Usuario usuario = usuarioRepository.findByUsuCorreo(correo)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
@@ -114,6 +116,7 @@ public class AuthService {
         emailService.enviarCorreoRecuperacion(correo, token);
     }
 
+    @Transactional
     public void restablecerPassword(String token, String nuevaClave) {
         String correo = jwtService.extraerCorreo(token); 
         

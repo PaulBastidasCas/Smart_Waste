@@ -55,4 +55,30 @@ public class InsigniaController {
             "insigniaId", actualizada.getInsId()
         ));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> actualizarInsignia(
+            @PathVariable @NonNull Integer id, 
+            @Valid @RequestBody InsigniaRequest request) {
+        
+        Insignia insignia = new Insignia();
+        insignia.setInsNombre(request.getInsNombre());
+        insignia.setInsDescripcion(request.getInsDescripcion());
+        insignia.setInsIconoBase64(request.getInsIconoBase64());
+        insignia.setInsColorHex(request.getInsColorHex());
+        insignia.setInsCriterioTipo(request.getInsCriterioTipo());
+        insignia.setInsCriterioValor(request.getInsCriterioValor());
+
+        Insignia actualizada = insigniaService.actualizarInsignia(id, insignia);
+        return ResponseEntity.ok(Map.of(
+            "mensaje", "Insignia actualizada exitosamente",
+            "insigniaId", actualizada.getInsId()
+        ));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarInsignia(@PathVariable @NonNull Integer id) {
+        insigniaService.eliminarInsignia(id);
+        return ResponseEntity.noContent().build();
+    }
 }

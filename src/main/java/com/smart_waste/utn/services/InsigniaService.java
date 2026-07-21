@@ -37,4 +37,27 @@ public class InsigniaService {
         insignia.setInsIconoBase64(iconoBase64);
         return insigniaRepository.save(insignia);
     }
+
+    @Transactional
+    public Insignia actualizarInsignia(@NonNull Integer id, Insignia datosNuevos) {
+        Insignia insignia = insigniaRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Insignia no encontrada"));
+        
+        insignia.setInsNombre(datosNuevos.getInsNombre());
+        insignia.setInsDescripcion(datosNuevos.getInsDescripcion());
+        insignia.setInsIconoBase64(datosNuevos.getInsIconoBase64());
+        insignia.setInsColorHex(datosNuevos.getInsColorHex());
+        insignia.setInsCriterioTipo(datosNuevos.getInsCriterioTipo());
+        insignia.setInsCriterioValor(datosNuevos.getInsCriterioValor());
+        
+        return insigniaRepository.save(insignia);
+    }
+
+    @SuppressWarnings("null")
+    @Transactional
+    public void eliminarInsignia(@NonNull Integer id) {
+        Insignia insignia = insigniaRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Insignia no encontrada"));
+        insigniaRepository.delete(insignia);
+    }
 }
