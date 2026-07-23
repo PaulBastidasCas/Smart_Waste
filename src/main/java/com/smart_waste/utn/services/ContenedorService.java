@@ -109,6 +109,28 @@ public class ContenedorService {
     public void eliminarContenedor(Integer id) {
         Contenedor contenedor = contenedorRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Contenedor no encontrado"));
-        contenedorRepository.delete(contenedor);
+
+        contenedor.setConActivo(false);
+        contenedor.setConEstadoOperativo(EstadoOperativo.FUERA_DE_SERVICIO); 
+        
+        contenedorRepository.save(contenedor);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Contenedor> listarInactivos() {
+        return contenedorRepository.findByConActivoFalse();
+    }
+
+    @Transactional
+    public Contenedor reactivarContenedor(@NonNull Integer id) {
+        Contenedor contenedor = contenedorRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Contenedor no encontrado"));
+
+        contenedor.setConActivo(true);
+        contenedor.setConNivelLlenadoPct(0);
+        contenedor.setConEstadoLlenado(com.smart_waste.utn.models.enums.EstadoLlenado.VACIO);
+        contenedor.setConEstadoOperativo(com.smart_waste.utn.models.enums.EstadoOperativo.OPERATIVO);
+        
+        return contenedorRepository.save(contenedor);
     }
 }

@@ -74,4 +74,14 @@ public class ContenedorController {
         contenedorService.eliminarContenedor(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/inactivos")
+    public ResponseEntity<List<Contenedor>> listarInactivos() {
+        return ResponseEntity.ok(contenedorService.listarInactivos());
+    }
+
+    @PatchMapping("/{id}/reactivar")
+    public ResponseEntity<Contenedor> reactivarContenedor(@PathVariable @NonNull Integer id) {
+        return ResponseEntity.ok(contenedorService.reactivarContenedor(id));
+    }
 }

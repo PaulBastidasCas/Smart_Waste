@@ -10,16 +10,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.Authentication;
 
+import com.smart_waste.utn.models.Rol;
 import com.smart_waste.utn.models.Usuario;
+import com.smart_waste.utn.repositories.RolRepository;
 import com.smart_waste.utn.repositories.UsuarioRepository;
 import com.smart_waste.utn.exceptions.ResourceNotFoundException;
 
 @Service
 public class UsuarioService {
+    
     private final UsuarioRepository usuarioRepository;
+    private final RolRepository rolRepository;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, RolRepository rolRepository) {
         this.usuarioRepository = usuarioRepository;
+        this.rolRepository = rolRepository;
     }
 
     @Transactional(readOnly = true)
@@ -58,9 +63,10 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
             
-        if (usuario.getUsuRol() != null) {
-            usuario.getUsuRol().setRolNombre(nuevoRolNombre);
-        }
+        Rol nuevoRol = rolRepository.findByRolNombre(nuevoRolNombre)
+            .orElseThrow(() -> new ResourceNotFoundException("El rol " + nuevoRolNombre + " no existe"));
+        
+        usuario.setUsuRol(nuevoRol);
         
         return usuarioRepository.save(usuario);
     }

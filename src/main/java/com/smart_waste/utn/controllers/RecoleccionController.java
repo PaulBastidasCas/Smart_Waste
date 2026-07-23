@@ -48,6 +48,7 @@ public class RecoleccionController {
         map.put("regEstadoLLenado", r.getRegEstadoLLenado());
         map.put("regDescripcionError", r.getRegDescripcionError());
         map.put("regObservaciones", r.getRegObservaciones());
+        map.put("regFotoBase64", r.getRegFotoBase64()); 
         
         if (r.getRegContenedor() != null) {
             map.put("regContenedor", Map.of(
